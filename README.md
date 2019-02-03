@@ -1,5 +1,9 @@
 # Rocks Builder on CentOS 6 Docker Image
 
+[![Docker Build Status](https://img.shields.io/docker/build/hpcdevops/docker-centos6-rocksbuilder.svg)](https://hub.docker.com/r/hpcdevops/docker-centos6-rocksbuilder/builds/)
+[![Docker Automated build](https://img.shields.io/docker/automated/hpcdevops/docker-centos6-rocksbuilder.svg)](https://hub.docker.com/r/hpcdevops/docker-centos6-rocksbuilder/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hpcdevops/docker-centos6-rocksbuilder.svg)](https://hub.docker.com/r/hpcdevops/docker-centos6-rocksbuilder/)
+
 This is a [Rocks](https://rocksclusters.org/) development appliance.
 
 This container provides a base install of the required software and configuration
