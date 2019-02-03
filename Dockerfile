@@ -9,6 +9,7 @@ LABEL org.label-schema.vcs-url="https://github.com/hpcdevops/docker-centos6-rock
 ARG ROCKS_TAG=ROCKS_6_2
 
 RUN yum makecache fast \
+    && yum -y update \
     && yum -y install \
         alsa-lib-devel \
         anaconda \
