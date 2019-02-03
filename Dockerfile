@@ -157,14 +157,7 @@ RUN yum makecache fast \
 
 RUN groupadd -g 403 -r rocksdb && useradd -d /var/opt/rocks/mysql -g rocksdb -r -s /bin/false -u 403 rocksdb
 
-RUN set -x \
-    && git clone https://github.com/rocksclusters/base.git \
-    && pushd base \
-    && git checkout tags/$ROCKS_TAG \
-    && popd \
-    && mkdir -m 0755 /export/rocks/install
-
-VOLUME ["/var/opt/rocks/mysql"]
+VOLUME ["/var/opt/rocks/mysql", "/export/rocks/install", "/export/rocks/src"]
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
