@@ -4,7 +4,7 @@ LABEL org.label-schema.vcs-url="https://github.com/hpcdevops/docker-centos6-rock
       org.label-schema.docker.cmd="docker run -it -h rocksbuild hpcdevops/docker-centos6-rocksbuilder:latest" \
       org.label-schema.name="docker-centos6-rocksbuilder" \
       org.label-schema.description="Rocks 6 Roll Build Host on CentOS 6" \
-      maintainer="HPCDevOops"
+      maintainer="HPCDevOps <hpcdevops@gmail.com>"
 
 ARG ROCKS_TAG=ROCKS_6_2
 
