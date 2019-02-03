@@ -152,8 +152,51 @@ RUN yum makecache fast \
         vim-enhanced \
         wget \
         wodim \
-        xorg-x11-xauth \
-    && yum clean all \
+        xorg-x11-xauth
+
+COPY rocks-forge-6.repo /etc/yum.repos.d/rocks-forge-6.repo
+
+RUN yum -y install \
+    foundation-ant \
+    foundation-coreutils \
+    foundation-gawk \
+    foundation-git \
+    foundation-graphviz \
+    foundation-libxml2 \
+    foundation-mercurial \
+    foundation-mysql \
+    foundation-python \
+    foundation-python-extras \
+    foundation-python-setuptools \
+    foundation-python-xml \
+    foundation-rcs \
+    foundation-redhat \
+    foundation-tidy \
+    foundation-wget \
+    librocks
+
+RUN yum -y install \
+    rocks-411 \
+    rocks-admin \
+    rocks-bittorrent \
+    rocks-boot \
+    rocks-boot-auto \
+    rocks-boot-xen \
+    rocks-channel \
+    rocks-config \
+    rocks-devel \
+    rocks-java \
+    rocks-kickstart \
+    rocks-pylib \
+    rocks-restore-roll \
+    rocks-sec-channel-client \
+    rocks-snmp-status \
+    rocks-sql \
+    rocks-ssl \
+    rocks-upstart \
+    tentakel
+
+RUN yum -y clean all \
     && rm -rf /var/cache/yum
 
 RUN groupadd -g 403 -r rocksdb && useradd -d /var/opt/rocks/mysql -g rocksdb -r -s /bin/false -u 403 rocksdb

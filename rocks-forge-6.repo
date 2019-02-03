@@ -1,0 +1,5 @@
+[Rocks-Forge-6.2]
+name=Rocks Forge 6.2
+baseurl=https://forge.sdsc.edu/rocks/6.2/x86_64/Redhat/RPMS
+enabled=1
+gpgcheck=0
