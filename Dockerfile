@@ -41,6 +41,7 @@ RUN yum makecache fast \
         docbook-utils \
         docbook-utils-pdf \
         e2fsprogs-devel \
+        elfutils \
         elfutils-devel \
         elfutils-libelf-devel \
         elinks \
@@ -52,6 +53,7 @@ RUN yum makecache fast \
         gcc \
         gcc-c++ \
         gcc-gfortran \
+        gdb \
         ghostscript \
         ghostscript-fonts \
         git \
@@ -132,7 +134,9 @@ RUN yum makecache fast \
         rcs \
         rdate \
         redhat-lsb \
+        redhat-rpm-config \
         readline-devel \
+        rpm-build \
         rpm-devel \
         screen \
         sharutils \
@@ -147,12 +151,14 @@ RUN yum makecache fast \
         tcpdump \
         tcsh \
         tk-devel \
+        unzip \
         urw-fonts \
         usermode \
         vim-enhanced \
         wget \
         wodim \
         xorg-x11-xauth
+
 
 COPY rocks-forge-6.repo /etc/yum.repos.d/rocks-forge-6.repo
 
