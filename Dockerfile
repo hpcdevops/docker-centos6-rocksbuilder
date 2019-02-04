@@ -8,6 +8,8 @@ LABEL org.label-schema.vcs-url="https://github.com/hpcdevops/docker-centos6-rock
 
 ARG ROCKS_TAG=ROCKS_6_2
 
+COPY rocks-forge-6.repo /etc/yum.repos.d/rocks-forge-6.repo
+
 RUN yum makecache fast \
     && yum -y update \
     && yum -y install \
@@ -159,9 +161,6 @@ RUN yum makecache fast \
         wodim \
         xorg-x11-xauth
 
-
-COPY rocks-forge-6.repo /etc/yum.repos.d/rocks-forge-6.repo
-
 RUN yum -y install \
     foundation-ant \
     foundation-coreutils \
@@ -200,9 +199,8 @@ RUN yum -y install \
     rocks-sql \
     rocks-ssl \
     rocks-upstart \
-    tentakel
-
-RUN yum -y clean all \
+    tentakel \
+    && yum -y clean all \
     && rm -rf /var/cache/yum
 
 RUN groupadd -g 403 -r rocksdb && useradd -d /var/opt/rocks/mysql -g rocksdb -r -s /bin/false -u 403 rocksdb
