@@ -27,26 +27,25 @@ build semantics (like BIND mounting the INSTALL dir) are not supported in
 this version of the builder.
 
 The easiest way to run the Rocks Builder for Rocks/CentOS 6 is by running
-with our pre-built container:
+with our pre-built container as shown here...
 
-	docker run --rm -it \
+	$ docker run --rm -it \
 		-e "container=docker" \
 		-h rocksbuilder \
 		-v "$(pwd):/export/rocks/src/roll" \
+		-v "/tmp:/tmp" \
 		-w "/export/rocks/src/roll" \
 		hpcdevops/docker-centos6-rocksbuilder:latest \
-		bash -exc ' \
-			mkdir -p /tmp/$(pwd) && \
-			tar -cf - . | ( cd /tmp/$(pwd) ; tar -xf - ) && \
-			pushd /tmp/$(pwd)/$(ls -1) && \
-			make
-		'
+		bash -exc '\
+			. $HOME/.bash_profile && \
+			rollbuild_sequence.sh sdsc-roll' 2>&1 | \
+		tee docker-centos6-rocksbuilder.sdsc-roll.build.log
 
 ...where `$(pwd)` is a directory containing the source of a Rocks
 application roll such as that created by cloning an SDSC Rocks
 Application roll like this...
 
-	$ git clone --depth=50 https://github.com/hpcdevops/sdsc-roll.git
+	$ git clone --depth=50 https://github.com/sdsc/sdsc-roll.git
 	Cloning into 'sdsc-roll'...
 	remote: Enumerating objects: 480, done.
 	remote: Counting objects: 100% (480/480), done.
@@ -56,6 +55,100 @@ Application roll like this...
 	Resolving deltas: 100% (299/299), done.
 
 	$ chmod -R g+rwX,o+rwX ./sdsc-roll
+
+The container will copy the roll source to /tmp, run the roll `bootstrap.sh`
+if one exists, then `make` the default target in the top level `Makefile`.
+
+The start and end of output of an example run is shown below...
+
+	++ PATH=/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rocks/bin:/opt/rocks/sbin:/home/rocksbuilder/bin
+	++ export PATH
+	+ rollbuild_sequence.sh sdsc-roll
+	+ ROLL_TO_BUILD=sdsc-roll
+	++ date
+	+ echo '=-=-=- Build of sdsc-roll started at Sat Feb  9 01:36:42 UTC 2019 -=-=-='
+	=-=-=- Build of sdsc-roll started at Sat Feb  9 01:36:42 UTC 2019 -=-=-=
+	++ pwd
+	+ mkdir -p /tmp//export/rocks/src/roll
+	+ '[' -d sdsc-roll ']'
+	+ tar -cf - ./sdsc-roll
+	++ pwd
+	+ cd /tmp//export/rocks/src/roll
+	+ tar -xf -
+	++ pwd
+	+ cd /tmp//export/rocks/src/roll
+	+ pushd sdsc-roll
+	/tmp/export/rocks/src/roll/sdsc-roll /tmp/export/rocks/src/roll
+	+ '[' -f ./bootstrap.sh ']'
+	+ grep -q yum ./bootstrap.sh
+	+ chmod +x ./bootstrap.sh
+	+ ./bootstrap.sh
+	
+		...<snip>...
+	
+	env GNUPGHOME=/opt/rocks/share/devel/../.gnupg \
+			Kickstart_Lang= \
+			Kickstart_Langsupport= \
+			rocks create roll roll-sdsc.xml
+	sdsc-roll-test-1-4: 70d278eebac9af44c0ab7df9f62a4fa3
+	sdsc-devel-3-12: 0305bce172ff00a36704ad2f480100f7
+	roll-sdsc-kickstart-6.2-236.g8c1fc07: f5fb0793adb1100f4eabe0cea83cc05e
+	sdsc-etc-profile-3-1: bff9c67ce1ede8317689bbdd7118c4fa
+	Creating disk1 (0.04MB)...
+	Building ISO image for disk1 ...
+	++ find . -name '*.iso'
+	+ for f in '$(find . -name "*.iso")'
+	+ isoinfo -R -f -i ./sdsc-6.2-236.g8c1fc07.x86_64.disk1.iso
+	/sdsc
+	/TRANS.TBL
+	/.discinfo
+	/sdsc/6.2
+	/sdsc/TRANS.TBL
+	/sdsc/6.2/TRANS.TBL
+	/sdsc/6.2/x86_64
+	/sdsc/6.2/x86_64/RedHat
+	/sdsc/6.2/x86_64/roll-sdsc.xml
+	/sdsc/6.2/x86_64/SRPMS
+	/sdsc/6.2/x86_64/TRANS.TBL
+	/sdsc/6.2/x86_64/RedHat/RPMS
+	/sdsc/6.2/x86_64/RedHat/TRANS.TBL
+	/sdsc/6.2/x86_64/RedHat/RPMS/roll-sdsc-kickstart-6.2-236.g8c1fc07.noarch.rpm
+	/sdsc/6.2/x86_64/RedHat/RPMS/sdsc-devel-3-12.x86_64.rpm
+	/sdsc/6.2/x86_64/RedHat/RPMS/sdsc-etc-profile-3-1.x86_64.rpm
+	/sdsc/6.2/x86_64/RedHat/RPMS/sdsc-roll-test-1-4.x86_64.rpm
+	/sdsc/6.2/x86_64/RedHat/RPMS/TRANS.TBL
+	+ popd
+	/tmp/export/rocks/src/roll
+	++ du -s --block-size=1k sdsc-roll
+	++ awk '{printf "%'\''d KB\n", $1}'
+	+ echo '=-=-=- Build of sdsc-roll required 1,860' 'KB -=-=-='
+	=-=-=- Build of sdsc-roll required 1,860 KB -=-=-=
+	+ pushd sdsc-roll
+	/tmp/export/rocks/src/roll/sdsc-roll /tmp/export/rocks/src/roll
+	++ find . -name '*.iso'
+	+ for f in '$(find . -name "*.iso")'
+	+ mv -v ./sdsc-6.2-236.g8c1fc07.x86_64.disk1.iso ../
+	`./sdsc-6.2-236.g8c1fc07.x86_64.disk1.iso' -> `../sdsc-6.2-236.g8c1fc07.x86_64.disk1.iso'
+	+ popd
+	/tmp/export/rocks/src/roll
+	+ rm -rf sdsc-roll
+	++ date
+	+ echo '=-=-=- Build of sdsc-roll finished at Sat Feb  9 01:36:58 UTC 2019 -=-=-='
+	=-=-=- Build of sdsc-roll finished at Sat Feb  9 01:36:58 UTC 2019 -=-=-=
+
+A summary of the build timing and space used on the build host can be extracted
+from the output...
+
+	$ egrep "^=-=-=- " docker-centos6-rocksbuilder.sdsc-roll.build.log
+	=-=-=- Build of sdsc-roll started at Sat Feb  9 01:36:42 UTC 2019 -=-=-=
+	=-=-=- Build of sdsc-roll required 1,860 KB -=-=-=
+	=-=-=- Build of sdsc-roll finished at Sat Feb  9 01:36:58 UTC 2019 -=-=-=
+
+And if run with the bind mounts suggested above the generated Rocks roll ISO
+file can be found at the following location...
+
+	$ ls -l /tmp/export/rocks/src/roll/sdsc-6.2-236.g8c1fc07.x86_64.disk1.iso
+	-rw-rw-r-- 1 150500 150500 430080 Feb  8 17:36 /tmp/export/rocks/src/roll/sdsc-6.2-236.g8c1fc07.x86_64.disk1.iso
 
 
 ## Notes
