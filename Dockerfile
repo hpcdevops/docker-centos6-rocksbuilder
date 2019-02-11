@@ -165,9 +165,12 @@ RUN \
 		vim-enhanced \
 		wget \
 		wodim \
-		xorg-x11-xauth
+		xorg-x11-xauth && \
+	yum -y clean all && \
+	rm -rf /var/cache/yum
 
 RUN \
+	yum makecache fast && \
 	yum -y install \
 		foundation-ant \
 		foundation-coreutils \
@@ -185,9 +188,12 @@ RUN \
 		foundation-redhat \
 		foundation-tidy \
 		foundation-wget \
-		librocks
+		librocks && \
+	yum -y clean all && \
+	rm -rf /var/cache/yum
 
 RUN \
+	yum makecache fast && \
 	yum -y install \
 		rocks-411 \
 		rocks-admin \
