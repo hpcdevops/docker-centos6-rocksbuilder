@@ -17,6 +17,7 @@ RUN \
 		anaconda \
 		apr \
 		apr-devel \
+		asciidoc \
 		apr-util-devel \
 		atk-devel \
 		audit-libs-devel \
@@ -58,7 +59,6 @@ RUN \
 		gdb \
 		ghostscript \
 		ghostscript-fonts \
-		git \
 		glib2-devel \
 		glibc-static \
 		grub \
@@ -165,6 +165,7 @@ RUN \
 		vim-enhanced \
 		wget \
 		wodim \
+		xmlto \
 		xorg-x11-xauth && \
 	yum -y clean all && \
 	rm -rf /var/cache/yum
