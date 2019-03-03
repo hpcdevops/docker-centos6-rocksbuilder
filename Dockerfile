@@ -59,6 +59,7 @@ RUN \
 		gdb \
 		ghostscript \
 		ghostscript-fonts \
+		git \
 		glib2-devel \
 		glibc-static \
 		grub \
